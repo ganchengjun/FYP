@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Activity log · I-RICE{% endblock %}
+{% block page_title %}Activity log{% endblock %}
+{% block page_subtitle %}A shared record of the decisions and updates shaping your exhibition.{% endblock %}
+{% block content %}
+<section class="card"><div class="card-header"><h2 class="section-heading mb-1">Recent event activity</h2><p class="small muted mb-0">Administrative changes and participant actions, shown most recent first.</p></div><div class="table-wrap"><table class="data-table"><thead><tr><th scope="col">Time</th><th scope="col">Action</th><th scope="col">Details</th><th scope="col">Actor</th></tr></thead><tbody>{% for log in logs %}<tr><td class="small muted text-nowrap">{{ log.created_at|datetime }}</td><td><span class="badge badge-neutral">{{ log.action|replace('_', ' ')|capitalize }}</span></td><td style="max-width: 520px; overflow-wrap: anywhere">{{ log.details }}</td><td class="small">{% if log.user is defined and log.user %}{{ log.user.name }}{% elif log.user_id %}User #{{ log.user_id }}{% else %}System{% endif %}</td></tr>{% else %}<tr><td colspan="4"><div class="empty-state"><h2 class="h5">A fresh start.</h2><p class="muted mb-0">Application reviews, booth allocations and other recorded changes will appear here.</p></div></td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

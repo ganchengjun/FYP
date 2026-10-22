@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% from 'macros.html' import icon %}
+{% block title %}{{ code }} · Something needs attention{% endblock %}
+{% block content %}<section class="error-page"><div class="error-code">{{ code }}</div><h1>{{ 'A little outside your workspace.' if code == 403 else 'We couldn’t find that page.' if code == 404 else 'Let’s give that another try.' }}</h1><p>{{ message }}</p><a class="btn btn-primary" href="{{ url_for('participant.dashboard') if current_user else url_for('participant.index') }}">{{ 'Back to my workspace' if current_user else 'Back to I-RICE' }} {{ icon('arrow',16) }}</a></section>{% endblock %}

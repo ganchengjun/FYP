@@ -1,0 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+instance/
+.env
+.env.*
+!.env.example
+node_modules/
+*.egg-info/
+test-results/
+playwright-report/
