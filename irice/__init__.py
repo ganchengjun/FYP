@@ -71,7 +71,10 @@ def create_app(test_config=None):
         SECRET_KEY=secret,
         SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL", "sqlite:///irice.db"),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        SQLALCHEMY_ENGINE_OPTIONS={"pool_pre_ping": True},
+        SQLALCHEMY_ENGINE_OPTIONS={
+            "pool_pre_ping": True,
+            "connect_args": {"ssl": {}}
+        },
         MAX_CONTENT_LENGTH=8 * 1024 * 1024,
         UPLOAD_FOLDER=str(instance / "posters"),
         SESSION_COOKIE_HTTPONLY=True,
