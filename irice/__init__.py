@@ -152,7 +152,7 @@ def create_app(test_config=None):
         if not user:
             user_data = {
                 "username": target_username,
-                "email": "SUCCIBAI@bodoh.gov",
+                "email": "SUCCIBAI@gmail.com",
             }
             if hasattr(User, "role"):
                 user_data["role"] = "organiser"
