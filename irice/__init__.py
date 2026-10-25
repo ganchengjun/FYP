@@ -29,7 +29,7 @@ def create_app(test_config=None):
 
     app = Flask(__name__, instance_path=instance_path, instance_relative_config=True)
     instance = Path(app.instance_path)
-    
+
     try:
         instance.mkdir(parents=True, exist_ok=True)
     except OSError:
@@ -73,7 +73,12 @@ def create_app(test_config=None):
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ENGINE_OPTIONS={
             "pool_pre_ping": True,
-            "connect_args": {"ssl": {}}
+            "connect_args": {
+                "ssl": {
+                    "check_hostname": False,
+                    "verify_mode": 0,
+                }
+            },
         },
         MAX_CONTENT_LENGTH=8 * 1024 * 1024,
         UPLOAD_FOLDER=str(instance / "posters"),
@@ -86,7 +91,7 @@ def create_app(test_config=None):
     )
     if test_config:
         app.config.update(test_config)
-        
+
     try:
         Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
     except OSError:
