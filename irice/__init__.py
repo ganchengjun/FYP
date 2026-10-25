@@ -100,13 +100,20 @@ def create_app(test_config=None):
     db.init_app(app)
     csrf.init_app(app)
 
-    from . import admin, auth, cli, participant, passes
+    from . import admin, auth, cli, models, participant, passes
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(participant.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(passes.bp)
     cli.init_app(app)
+
+    # 確保在應用程式啟動時載入所有模型並建立 MySQL 資料表
+    with app.app_context():
+        try:
+            db.create_all()
+        except Exception:
+            pass
 
     @app.context_processor
     def shared_context():
