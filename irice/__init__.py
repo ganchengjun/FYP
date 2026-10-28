@@ -16,7 +16,7 @@ from .extensions import csrf, db
 
 @event.listens_for(Engine, "connect")
 def _sqlite_foreign_keys(connection, _record):
-    if connection.__class__.__module__.startswith("sqlite3"):
+    if connection.__class__.module.startswith("sqlite3"):
         connection.execute("PRAGMA foreign_keys=ON")
 
 
@@ -67,9 +67,16 @@ def create_app(test_config=None):
     if len(secret) < 32 or secret.startswith("REPLACE_WITH"):
         secret = "fallback_secret_key_for_vercel_deployment_min_32_chars"
 
+    # 取得資料庫 URL，並自動將網域名稱替換為固定 IP 以繞過 Vercel [Errno 16] DNS 解析錯誤
+    db_uri = os.environ.get("DATABASE_URL", "sqlite:///irice.db")
+    if "irice-irice.e.aivencloud.com" in db_uri:
+        db_uri = db_uri.replace("irice-irice.e.aivencloud.com", "159.65.148.27")
+    elif "irice-irice.aivencloud.com" in db_uri:
+        db_uri = db_uri.replace("irice-irice.aivencloud.com", "159.65.148.27")
+
     app.config.from_mapping(
         SECRET_KEY=secret,
-        SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL", "sqlite:///irice.db"),
+        SQLALCHEMY_DATABASE_URI=db_uri,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ENGINE_OPTIONS={
             "pool_pre_ping": True,
